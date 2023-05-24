@@ -54,14 +54,14 @@ namespace fakestrore_Net.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Rate = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
-                    ProductID = table.Column<int>(type: "int", nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ratings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ratings_Products_ProductID",
-                        column: x => x.ProductID,
+                        name: "FK_Ratings_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -73,9 +73,9 @@ namespace fakestrore_Net.Migrations
                 column: "CategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ratings_ProductID",
+                name: "IX_Ratings_ProductId",
                 table: "Ratings",
-                column: "ProductID",
+                column: "ProductId",
                 unique: true);
         }
 

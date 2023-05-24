@@ -1,8 +1,9 @@
-﻿using fakestrore_Net.Data;
-using fakestrore_Net.DTOs;
-using fakestrore_Net.Models;
+﻿using fakestrore_Net.DTOs;
+using fakestrore_Net.Services.AdminService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 namespace fakestrore_Net.Controllers
 {
@@ -10,51 +11,45 @@ namespace fakestrore_Net.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IAdminService _adminService;
 
-        public AdminController(DataContext context)
+        public AdminController(IAdminService adminService)
         {
-            _context = context;
+            _adminService = adminService;
         }
-        [HttpPost]
+
+        //Add category
+        [HttpPost("categories")]
         public async Task<ActionResult<List<Category>>> AddCategory(CategoryCreateDTO request)
         {
-
-            var newCategory = new Category
+            var options = new JsonSerializerOptions
             {
-                Name = request.Name
+                ReferenceHandler = ReferenceHandler.Preserve,
+                MaxDepth = 32
             };
-            var products = request.Products.Select(p => new Product
+
+            try
             {
-                Title = p.Title,
-                Price = p.Price,
-                Description = p.Description,
-                Image = p.Image,
-                Rating = new Rating
+                var result = await _adminService.AddCategory(request);
+                if (result == null)
                 {
-                    Rate = p.Rating.Rate,
-                    Count = p.Rating.Count
-                },
-                Category = newCategory
-            }).ToList();
-            newCategory.Products = products;
-            _context.Categories.Add(newCategory);
-            await _context.SaveChangesAsync();
-            return Ok();
+                    return BadRequest("Can't add category");
+                }
+
+                var json = JsonSerializer.Serialize(result, options);
+
+                // Tiếp tục xử lý JSON hoặc trả về JSON nếu cần thiết
+                // ...
+
+                return Ok("Success!");
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCharacterById(int id)
-        {
-            var category = await _context.Categories
-               .Include(p => p.Products)
-               .ThenInclude(r => r.Rating)
-               .FirstOrDefaultAsync(c => c.Id == id);
-            return Ok(category);
-        }
     }
 }
 
-/*            _context.Categories.Add(newCategory);
-            await _context.SaveChangesAsync();
-            return await _context.Categories.ToListAsync();*/

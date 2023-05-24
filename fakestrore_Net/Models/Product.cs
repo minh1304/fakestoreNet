@@ -17,7 +17,8 @@ namespace fakestrore_Net.Models
         public Category? Category { get; set; }
         public string Image { get; set; } = string.Empty;
         //1-1
-        public Rating? Rating { get; set; }
+        public Rating Rating { get; set; }
+
 
     }
 }

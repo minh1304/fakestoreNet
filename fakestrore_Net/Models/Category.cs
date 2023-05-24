@@ -7,7 +7,5 @@
 
         //1-n
         public List<Product>? Products { get; set; }
-
-
     }
 }

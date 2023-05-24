@@ -82,7 +82,7 @@ namespace fakestrore_Net.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductID")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Rate")
@@ -90,7 +90,7 @@ namespace fakestrore_Net.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductID")
+                    b.HasIndex("ProductId")
                         .IsUnique();
 
                     b.ToTable("Ratings");
@@ -111,7 +111,7 @@ namespace fakestrore_Net.Migrations
                 {
                     b.HasOne("fakestrore_Net.Models.Product", "Product")
                         .WithOne("Rating")
-                        .HasForeignKey("fakestrore_Net.Models.Rating", "ProductID")
+                        .HasForeignKey("fakestrore_Net.Models.Rating", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -125,7 +125,8 @@ namespace fakestrore_Net.Migrations
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
                 {
-                    b.Navigation("Rating");
+                    b.Navigation("Rating")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

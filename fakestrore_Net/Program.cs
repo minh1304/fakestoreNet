@@ -1,4 +1,7 @@
+global using fakestrore_Net.Models;
 using fakestrore_Net.Data;
+using fakestrore_Net.Services.AdminService;
+using fakestrore_Net.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Register Services DI
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 var app = builder.Build();
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace fakestrore_Net.Models
 {
@@ -10,9 +9,12 @@ namespace fakestrore_Net.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal Rate { get; set; }
         public int Count { get; set; }
-        public int ProductID { get; set; }
-        [JsonIgnore]
-        public Product? Product { get; set; }
+
+        [ForeignKey("Product")] // Specify the foreign key property name
+        public int ProductId { get; set; } // Foreign key property
+
+        public Product Product { get; set; }
+
 
     }
 }
