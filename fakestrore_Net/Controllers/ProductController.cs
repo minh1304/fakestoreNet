@@ -1,4 +1,5 @@
-﻿using fakestrore_Net.Services.ProductService;
+﻿using fakestrore_Net.Filter;
+using fakestrore_Net.Services.ProductService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,39 +10,18 @@ namespace fakestrore_Net.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private string RemoveIdFromJson(string json)
-        {
-            // Phân tích chuỗi JSON thành đối tượng JObject
-            JObject jObject = JObject.Parse(json);
-
-            // Tìm tất cả các thuộc tính có tên "$id" và loại bỏ chúng
-            foreach (JProperty property in jObject.Properties().ToList())
-            {
-                if (property.Name == "$id")
-                {
-                    property.Remove();
-                }
-            }
-
-            // Chuyển đối tượng JObject thành chuỗi JSON đã chỉnh sửa
-            string editedJson = jObject.ToString();
-
-            return editedJson;
-        }
         private readonly IProductService _productService;
 
         public ProductController(IProductService productService)
         {
             _productService = productService;
         }
-
-        //Get all Products 
-        [HttpGet()]
-        public async Task<ActionResult<List<object>>> GetAllProducts()
+        [HttpGet]
+        public async Task<ActionResult<List<object>>> GetAllProducts([FromQuery] PaginationFilter filter)
         {
             try
             {
-                var products = await _productService.GetAllProducts();
+                var products = await _productService.GetAllProducts(filter);
                 if (products == null)
                 {
                     return NotFound("Not found Products");
