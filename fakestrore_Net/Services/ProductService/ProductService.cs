@@ -15,6 +15,7 @@ namespace fakestrore_Net.Services.ProductService
             _context = context;
         }
 
+        //GET all products , pagination, sort 
         public async Task<List<object>> GetAllProducts([FromQuery] PaginationFilter? filter, [FromQuery] SortFilter sortFilter)
         {
             var productsQuery = _context.Products
@@ -62,7 +63,6 @@ namespace fakestrore_Net.Services.ProductService
         }
 
 
-
         //GET a single product
         public async Task<object> GetProductById(int id)
         {
@@ -87,7 +87,15 @@ namespace fakestrore_Net.Services.ProductService
                 .FirstOrDefaultAsync();
             return product;
         }
+        //GET all Name category
+        public async Task<List<string>> GetAllCategories()
+        {
+            var nameCategories = await _context.Categories
+                .Select(c => c.Name)
+                .ToListAsync();
 
+            return nameCategories;
+        }
 
         //GET all products in Category
         public async Task<Category?> GetCategoryByName(string name)

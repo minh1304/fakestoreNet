@@ -6,6 +6,7 @@ namespace fakestrore_Net.Services.ProductService
 {
     public interface IProductService
     {
+        Task<List<string>> GetAllCategories();
         Task<Category?> GetCategoryByName(string name);
         Task<List<object>> GetAllProducts([FromQuery] PaginationFilter filter, [FromQuery] SortFilter sortFilter);
         Task<object> GetProductById(int id);

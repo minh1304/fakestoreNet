@@ -66,6 +66,25 @@ namespace fakestrore_Net.Controllers
                 return BadRequest("Can't serialize result");
             }
         }
+        //Get all name category
+        [HttpGet("Categories")]
+        public async Task<ActionResult<List<string>>> GetAllCategories()
+        {
+            try
+            {
+                var result = await _productService.GetAllCategories();
+                if (result == null)
+                {
+                    return BadRequest("Don't Found");
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
+        }
 
         //Get all products in Category
 
