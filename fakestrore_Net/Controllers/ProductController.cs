@@ -1,4 +1,5 @@
-﻿using fakestrore_Net.Filter;
+﻿using fakestore_Net.Filter;
+using fakestrore_Net.Filter;
 using fakestrore_Net.Services.ProductService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,11 +18,11 @@ namespace fakestrore_Net.Controllers
             _productService = productService;
         }
         [HttpGet]
-        public async Task<ActionResult<List<object>>> GetAllProducts([FromQuery] PaginationFilter filter)
+        public async Task<ActionResult<List<object>>> GetAllProducts([FromQuery] PaginationFilter filter, [FromQuery] SortFilter sortFilter)
         {
             try
             {
-                var products = await _productService.GetAllProducts(filter);
+                var products = await _productService.GetAllProducts(filter, sortFilter);
                 if (products == null)
                 {
                     return NotFound("Not found Products");

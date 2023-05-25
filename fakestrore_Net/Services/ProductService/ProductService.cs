@@ -1,4 +1,5 @@
-﻿using fakestrore_Net.Data;
+﻿using fakestore_Net.Filter;
+using fakestrore_Net.Data;
 using fakestrore_Net.Filter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace fakestrore_Net.Services.ProductService
             _context = context;
         }
 
-        public async Task<List<object>> GetAllProducts([FromQuery] PaginationFilter? filter)
+        public async Task<List<object>> GetAllProducts([FromQuery] PaginationFilter? filter, [FromQuery] SortFilter sortFilter)
         {
             var productsQuery = _context.Products
                 .Include(p => p.Category)
@@ -33,6 +34,19 @@ namespace fakestrore_Net.Services.ProductService
                         count = p.Rating.Count
                     }
                 });
+
+            //Nếu không truyền thì mặc định, giảm dần thì bật true, tăng dần thì false 
+            if (sortFilter?.IsDescending == true)
+            {
+                productsQuery = productsQuery.OrderByDescending(p => p.Price);
+            }
+            else if (sortFilter?.IsDescending == false)
+            {
+                productsQuery = productsQuery.OrderBy(p => p.Price);
+            }
+
+            //Phân trang: Nếu không truyền vào thì hiện mặc định
+
             if (filter != null && filter.PageSize.HasValue && filter.PageNumber.HasValue)
             {
                 int pageNumber = filter.PageNumber.Value < 1 ? 1 : filter.PageNumber.Value;
@@ -42,9 +56,11 @@ namespace fakestrore_Net.Services.ProductService
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize);
             }
+
             var products = await productsQuery.ToListAsync<object>();
             return products;
         }
+
 
 
         //GET a single product
