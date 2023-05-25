@@ -4,5 +4,6 @@
     {
         Task<Category?> GetCategoryByName(string name);
         Task<List<object>> GetAllProducts();
+        Task<object> GetProductById(int id);
     }
 }

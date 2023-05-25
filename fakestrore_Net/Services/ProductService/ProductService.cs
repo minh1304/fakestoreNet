@@ -12,9 +12,11 @@ namespace fakestrore_Net.Services.ProductService
             _context = context;
         }
 
+
+        //GET all product
         public async Task<List<object>> GetAllProducts()
         {
-            var productsWithCategoryName = await _context.Products
+            var products = await _context.Products
                 .Include(p => p.Category) // Nạp thông tin danh mục vào kết quả truy vấn
                 .Include(p => p.Rating)
                 .Select(p => new
@@ -24,6 +26,7 @@ namespace fakestrore_Net.Services.ProductService
                     Price = p.Price,
                     Description = p.Description,
                     Category = p.Category.Name, // Lấy tên danh mục từ đối tượng Category
+                    Image = p.Image,
                     Rating = new
                     {
                         rate = p.Rating.Rate,
@@ -32,9 +35,35 @@ namespace fakestrore_Net.Services.ProductService
                 })
                 .ToListAsync<object>();
 
-            return productsWithCategoryName.Cast<object>().ToList();
+            return products.Cast<object>().ToList();
+        }
+        //GET a single product
+        public async Task<object> GetProductById(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category) // Nạp thông tin danh mục vào kết quả truy vấn
+                .Include(p => p.Rating)
+                .Where(p => p.Id == id)
+                .Select(p => new
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Price = p.Price,
+                    Description = p.Description,
+                    Category = p.Category.Name, // Lấy tên danh mục từ đối tượng Category
+                    Image = p.Image,
+                    Rating = new
+                    {
+                        rate = p.Rating.Rate,
+                        count = p.Rating.Count
+                    }
+                })
+                .FirstOrDefaultAsync();
+            return product;
         }
 
+
+        //GET all products in Category
         public async Task<Category?> GetCategoryByName(string name)
         {
             var category = await _context.Categories
@@ -49,5 +78,7 @@ namespace fakestrore_Net.Services.ProductService
 
             return category;
         }
+
+
     }
 }

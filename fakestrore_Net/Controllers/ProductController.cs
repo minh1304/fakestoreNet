@@ -55,6 +55,36 @@ namespace fakestrore_Net.Controllers
                 return BadRequest("Can't retrieve products");
             }
         }
+        //GET a single product
+        [HttpGet("{id}")]
+        public async Task<ActionResult<object>> GetProductById(int id)
+        {
+            try
+            {
+                var result = await _productService.GetProductById(id);
+                if (result == null)
+                {
+                    return NotFound("Not found Products");
+                }
+
+                var json = JsonConvert.SerializeObject(result, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+                //Chỉnh cho đẹp
+                JObject jObject = JObject.Parse(json);
+
+                json = jObject.ToString();
+
+                return Ok(json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
+        }
 
         //Get all products in Category
 
