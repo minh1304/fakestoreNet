@@ -125,8 +125,7 @@ namespace fakestrore_Net.Migrations
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
                 {
-                    b.Navigation("Rating")
-                        .IsRequired();
+                    b.Navigation("Rating");
                 });
 #pragma warning restore 612, 618
         }

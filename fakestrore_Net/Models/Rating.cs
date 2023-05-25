@@ -12,8 +12,7 @@ namespace fakestrore_Net.Models
 
         [ForeignKey("Product")] // Specify the foreign key property name
         public int ProductId { get; set; } // Foreign key property
-
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
 
     }

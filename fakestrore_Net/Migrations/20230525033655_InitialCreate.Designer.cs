@@ -11,8 +11,8 @@ using fakestrore_Net.Data;
 namespace fakestrore_Net.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230524052307_Initial")]
-    partial class Initial
+    [Migration("20230525033655_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,8 +128,7 @@ namespace fakestrore_Net.Migrations
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
                 {
-                    b.Navigation("Rating")
-                        .IsRequired();
+                    b.Navigation("Rating");
                 });
 #pragma warning restore 612, 618
         }

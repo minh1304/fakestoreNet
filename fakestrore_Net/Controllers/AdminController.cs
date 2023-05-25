@@ -25,7 +25,9 @@ namespace fakestrore_Net.Controllers
             var options = new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve,
-                MaxDepth = 32
+                MaxDepth = 32,
+                IgnoreNullValues = true,
+                PropertyNameCaseInsensitive = true
             };
 
             try

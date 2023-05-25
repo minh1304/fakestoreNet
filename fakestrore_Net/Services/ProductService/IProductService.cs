@@ -3,5 +3,6 @@
     public interface IProductService
     {
         Task<Category?> GetCategoryByName(string name);
+        Task<List<object>> GetAllProducts();
     }
 }
