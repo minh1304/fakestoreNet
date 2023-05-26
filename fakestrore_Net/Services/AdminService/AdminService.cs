@@ -14,6 +14,8 @@ namespace fakestrore_Net.Services.AdminService
             _context = context;
         }
 
+
+        //Add category 
         public async Task<ActionResult<List<Category>>> AddCategory(CategoryCreateDTO request)
         {
 
@@ -38,6 +40,34 @@ namespace fakestrore_Net.Services.AdminService
             _context.Categories.Add(newCategory);
             await _context.SaveChangesAsync();
             return await _context.Categories.ToListAsync();
+        }
+
+        //Add new product
+        public async Task<ActionResult<List<Product>>> AddNewProduct(ProductCreateDTO request)
+        {
+            var newProduct = new Product
+            {
+                Title = request.Title,
+                Price = request.Price,
+                Description = request.Description,
+                Image = request.Image,
+                Rating = new Rating
+                {
+                    Rate = request.Rating.Rate,
+                    Count = request.Rating.Count
+                }
+            };
+            var categoryId = request.CategoryID;
+            var existingCategory = await _context.Categories.FindAsync(categoryId);
+
+            if (existingCategory == null)
+            {
+                return null;
+            }
+            newProduct.CategoryID = categoryId;
+            _context.Products.Add(newProduct);
+            await _context.SaveChangesAsync();
+            return await _context.Products.ToListAsync();
         }
     }
 }

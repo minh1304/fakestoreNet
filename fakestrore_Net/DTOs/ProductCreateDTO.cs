@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fakestrore_Net.DTOs
@@ -11,9 +12,10 @@ namespace fakestrore_Net.DTOs
         public string Description { get; set; } = string.Empty;
         //n-1
         // Để vì có ràng buộc thuộc category nào
-        /*public int CategoryID { get; set; }*/
+        public int CategoryID { get; set; }
         public string Image { get; set; }
         //1-1
+        [Required] // Add the Required attribute
         public RatingCreateDTO Rating { get; set; }
     }
 }

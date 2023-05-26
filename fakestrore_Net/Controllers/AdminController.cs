@@ -52,6 +52,41 @@ namespace fakestrore_Net.Controllers
             }
         }
 
+
+        //Add Product 
+        //POST product
+        [HttpPost("product")]
+        public async Task<ActionResult<List<Product>>> AddNewProduct(ProductCreateDTO request)
+        {
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                MaxDepth = 32,
+                IgnoreNullValues = true,
+                PropertyNameCaseInsensitive = true
+            };
+
+            try
+            {
+                var result = await _adminService.AddNewProduct(request);
+                if (result == null)
+                {
+                    return BadRequest("Can't add product");
+                }
+
+                var json = JsonSerializer.Serialize(result, options);
+
+                // Tiếp tục xử lý JSON hoặc trả về JSON nếu cần thiết
+                // ...
+
+                return Ok("Success!");
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
+        }
     }
 }
 

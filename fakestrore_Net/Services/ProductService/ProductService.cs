@@ -142,14 +142,3 @@ namespace fakestrore_Net.Services.ProductService
 
     }
 }
-
-/*            var category = await _context.Categories
-                .Include(p => p.Products)
-                .ThenInclude(r => r.Rating)
-                .FirstOrDefaultAsync(c => c.Name == name);
-            if (category is null)
-            {
-                return null;
-            }
-
-            return category;*/
