@@ -45,18 +45,6 @@ namespace fakestrore_Net.Services.AdminService
         //Add new product
         public async Task<ActionResult<List<Product>>> AddNewProduct(ProductCreateDTO request)
         {
-            var newProduct = new Product
-            {
-                Title = request.Title,
-                Price = request.Price,
-                Description = request.Description,
-                Image = request.Image,
-                Rating = new Rating
-                {
-                    Rate = request.Rating.Rate,
-                    Count = request.Rating.Count
-                }
-            };
             var categoryId = request.CategoryID;
             var existingCategory = await _context.Categories.FindAsync(categoryId);
 
@@ -64,8 +52,34 @@ namespace fakestrore_Net.Services.AdminService
             {
                 return null;
             }
-            newProduct.CategoryID = categoryId;
+            var newProduct = new Product
+            {
+                Title = request.Title,
+                Price = request.Price,
+                Description = request.Description,
+                Image = request.Image,
+                CategoryID = categoryId,
+                Rating = new Rating
+                {
+                    Rate = request.Rating.Rate,
+                    Count = request.Rating.Count
+                }
+            };
+
             _context.Products.Add(newProduct);
+            await _context.SaveChangesAsync();
+            return await _context.Products.ToListAsync();
+        }
+
+        //Delete product
+        public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return null;
+            }
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return await _context.Products.ToListAsync();
         }

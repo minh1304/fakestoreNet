@@ -8,5 +8,6 @@ namespace fakestrore_Net.Services.AdminService
         Task<ActionResult<List<Category>>> AddCategory(CategoryCreateDTO request);
 
         Task<ActionResult<List<Product>>> AddNewProduct(ProductCreateDTO request);
+        Task<ActionResult<List<Product>>> DeleteProduct(int id);
     }
 }

@@ -87,6 +87,39 @@ namespace fakestrore_Net.Controllers
                 return BadRequest("Can't serialize result");
             }
         }
+
+        [HttpDelete("product/{id}")]
+        public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
+        {
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                MaxDepth = 32,
+                IgnoreNullValues = true,
+                PropertyNameCaseInsensitive = true
+            };
+
+            try
+            {
+                var result = await _adminService.DeleteProduct(id);
+                if (result == null)
+                {
+                    return BadRequest("Can't add product");
+                }
+
+                var json = JsonSerializer.Serialize(result, options);
+
+                // Tiếp tục xử lý JSON hoặc trả về JSON nếu cần thiết
+                // ...
+
+                return Ok("Success!");
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
+        }
     }
 }
 
