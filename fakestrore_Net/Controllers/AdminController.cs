@@ -88,6 +88,7 @@ namespace fakestrore_Net.Controllers
             }
         }
 
+        //Remove by id
         [HttpDelete("product/{id}")]
         public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
         {
@@ -104,7 +105,7 @@ namespace fakestrore_Net.Controllers
                 var result = await _adminService.DeleteProduct(id);
                 if (result == null)
                 {
-                    return BadRequest("Can't add product");
+                    return BadRequest("Can't remove product");
                 }
 
                 var json = JsonSerializer.Serialize(result, options);
@@ -120,6 +121,43 @@ namespace fakestrore_Net.Controllers
                 return BadRequest("Can't serialize result");
             }
         }
+
+        //Update product
+        [HttpPut("product/{id}")]
+        public async Task<ActionResult<List<Product>>> UpdateProduct(int id, ProductUpdateDTO request)
+        {
+
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                MaxDepth = 32,
+                IgnoreNullValues = true,
+                PropertyNameCaseInsensitive = true
+            };
+
+            try
+            {
+                var result = await _adminService.UpdateProduct(id, request);
+                if (result == null)
+                {
+                    return BadRequest("Product not found");
+                }
+
+                var json = JsonSerializer.Serialize(result, options);
+
+                // Tiếp tục xử lý JSON hoặc trả về JSON nếu cần thiết
+                // ...
+
+                return Ok("Success!");
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
+        }
+
+
     }
 }
 

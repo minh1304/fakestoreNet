@@ -83,5 +83,40 @@ namespace fakestrore_Net.Services.AdminService
             await _context.SaveChangesAsync();
             return await _context.Products.ToListAsync();
         }
+
+        //Update product
+        public async Task<ActionResult<Product>> UpdateProduct(int id, ProductUpdateDTO request)
+        {
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            product.Title = request.Title;
+            product.Price = request.Price;
+            product.Description = request.Description;
+            product.Image = request.Image;
+
+
+            // Update the category if needed
+            var categoryId = request.CategoryID;
+            var existingCategory = await _context.Categories.FindAsync(categoryId);
+
+            if (existingCategory == null)
+            {
+                return null;
+            }
+
+            product.CategoryID = categoryId;
+
+            await _context.SaveChangesAsync();
+
+            // Return the updated product
+            return product;
+        }
+
     }
 }
