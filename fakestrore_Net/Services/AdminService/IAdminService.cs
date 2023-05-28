@@ -1,4 +1,5 @@
-﻿using fakestrore_Net.DTOs;
+﻿using fakestrore_Net.DTOs.CategoryDTO;
+using fakestrore_Net.DTOs.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fakestrore_Net.Services.AdminService

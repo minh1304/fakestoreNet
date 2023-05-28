@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using fakestrore_Net.DTOs.RatingDTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace fakestrore_Net.DTOs
+namespace fakestrore_Net.DTOs.ProductDTO
 {
     public class ProductCreateDTO
     {

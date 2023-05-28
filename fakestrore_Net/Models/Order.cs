@@ -8,15 +8,15 @@ namespace fakestrore_Net.Models
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
 
-        // n - 1 : 1 usser có thể có nhiều order 
+        // 1 - n: Một user có thể có nhiều order
         public int UserId { get; set; }
         public User? User { get; set; }
 
-        // n - 1 : 1 product có thể trong nhiều order
-        public int ProductId { get; set; }
-        public Product? Product { get; set; }
+        // n - n: Một order có thể có nhiều product, 1 product cũng có thể có trong nhiều order
+        public required List<Product> Products { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal TotalAmount { get; set; }
     }
+
 }

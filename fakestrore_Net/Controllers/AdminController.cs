@@ -1,4 +1,5 @@
-﻿using fakestrore_Net.DTOs;
+﻿using fakestrore_Net.DTOs.CategoryDTO;
+using fakestrore_Net.DTOs.ProductDTO;
 using fakestrore_Net.Services.AdminService;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;

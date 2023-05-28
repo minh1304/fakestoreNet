@@ -1,5 +1,6 @@
 ﻿using fakestrore_Net.Data;
-using fakestrore_Net.DTOs;
+using fakestrore_Net.DTOs.CategoryDTO;
+using fakestrore_Net.DTOs.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

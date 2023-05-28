@@ -19,7 +19,7 @@ namespace fakestrore_Net.Models
         public Rating? Rating { get; set; }
 
         // 1 - n: 1 product có thể thuộc nhiều đơn hàng khác nhau 
-        public List<Order>? Orders { get; set; }
+        public List<Order> Orders { get; set; }
 
 
 

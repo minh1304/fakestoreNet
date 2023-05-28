@@ -1,4 +1,6 @@
-﻿namespace fakestrore_Net.DTOs
+﻿using fakestrore_Net.DTOs.ProductDTO;
+
+namespace fakestrore_Net.DTOs.CategoryDTO
 {
     public class CategoryCreateDTO
     {

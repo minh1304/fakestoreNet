@@ -1,4 +1,4 @@
-﻿namespace fakestrore_Net.DTOs
+﻿namespace fakestrore_Net.DTOs.ProductDTO
 {
     public class ProductUpdateDTO
     {

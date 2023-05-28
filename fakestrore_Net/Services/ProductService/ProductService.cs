@@ -1,6 +1,8 @@
 ﻿using fakestore_Net.Filter;
 using fakestrore_Net.Data;
-using fakestrore_Net.DTOs;
+using fakestrore_Net.DTOs.CategoryDTO;
+using fakestrore_Net.DTOs.ProductDTO;
+using fakestrore_Net.DTOs.RatingDTO;
 using fakestrore_Net.Filter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -22,6 +22,21 @@ namespace fakestrore_Net.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrdersId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("OrderProduct");
+                });
+
             modelBuilder.Entity("fakestrore_Net.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -50,9 +65,6 @@ namespace fakestrore_Net.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(10,2)");
 
@@ -60,8 +72,6 @@ namespace fakestrore_Net.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
 
@@ -134,9 +144,6 @@ namespace fakestrore_Net.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -154,21 +161,28 @@ namespace fakestrore_Net.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("fakestrore_Net.Models.Order", b =>
+            modelBuilder.Entity("OrderProduct", b =>
                 {
-                    b.HasOne("fakestrore_Net.Models.Product", "Product")
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("fakestrore_Net.Models.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("fakestrore_Net.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("fakestrore_Net.Models.Order", b =>
+                {
                     b.HasOne("fakestrore_Net.Models.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
 
                     b.Navigation("User");
                 });
@@ -202,8 +216,6 @@ namespace fakestrore_Net.Migrations
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
                 {
-                    b.Navigation("Orders");
-
                     b.Navigation("Rating");
                 });
 
