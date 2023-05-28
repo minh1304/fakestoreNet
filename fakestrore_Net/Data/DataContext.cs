@@ -1,5 +1,4 @@
-﻿using fakestrore_Net.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace fakestrore_Net.Data
 {
@@ -12,5 +11,7 @@ namespace fakestrore_Net.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

@@ -142,12 +142,7 @@ namespace fakestrore_Net.Controllers
                 {
                     return BadRequest("Product not found");
                 }
-
                 var json = JsonSerializer.Serialize(result, options);
-
-                // Tiếp tục xử lý JSON hoặc trả về JSON nếu cần thiết
-                // ...
-
                 return Ok("Success!");
             }
             catch (JsonException ex)

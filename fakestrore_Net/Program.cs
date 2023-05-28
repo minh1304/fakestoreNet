@@ -2,6 +2,7 @@ global using fakestrore_Net.Models;
 using fakestrore_Net.Data;
 using fakestrore_Net.Services.AdminService;
 using fakestrore_Net.Services.ProductService;
+using fakestrore_Net.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddSwaggerGen();
 //Register Services DI
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

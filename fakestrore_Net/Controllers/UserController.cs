@@ -1,0 +1,53 @@
+﻿using fakestrore_Net.DTOs;
+using fakestrore_Net.Services.UserService;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace fakestrore_Net.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+        [HttpPost("order")]
+        public async Task<ActionResult<List<Product>>> AddOrder(OrderCreateDTO request)
+        {
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                MaxDepth = 32,
+                IgnoreNullValues = true,
+                PropertyNameCaseInsensitive = true
+            };
+
+            try
+            {
+                var result = await _userService.AddOrder(request);
+                if (result == null)
+                {
+                    return BadRequest("Can't add product");
+                }
+
+                var json = JsonSerializer.Serialize(result, options);
+
+                // Tiếp tục xử lý JSON hoặc trả về JSON nếu cần thiết
+                // ...
+
+                return Ok("Success!");
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
+        }
+
+    }
+}
