@@ -1,6 +1,8 @@
 ﻿using fakestrore_Net.Data;
 using fakestrore_Net.DTOs.CategoryDTO;
+using fakestrore_Net.DTOs.OrderDTO;
 using fakestrore_Net.DTOs.ProductDTO;
+using fakestrore_Net.DTOs.UserDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -85,6 +87,88 @@ namespace fakestrore_Net.Services.AdminService
             return await _context.Products.ToListAsync();
         }
 
+
+        //GET all users
+        public async Task<ActionResult<List<UserGetDTO>>> GetAllUser()
+        {
+            var query = await _context.Users
+               .Include(u => u.Orders)
+                   .ThenInclude(o => o.Products)
+               .ToListAsync();
+
+            if (query.Count == 0)
+            {
+                return null; // Return appropriate HTTP status code for empty result
+            }
+
+            var result = query.Select(user => new UserGetDTO
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                UserEmail = user.UserEmail,
+                PasswordHash = user.PasswordHash,
+                Orders = user.Orders
+                    //Check mảng rỗng 
+                    .Where(order => order.Products.Count > 0)
+                    .Select(order => new OrderGetDTO
+                    {
+                        UserId = order.UserId,
+                        //Chưa làm 
+                        /* TotalAmount = order.TotalAmount,*/
+                        TotalAmount = order.Products.Sum(product => product.Price),
+                        Products = order.Products.Select(product => new ProductGetDTO
+                        {
+                            Id = product.Id,
+                            Title = product.Title,
+                            Price = product.Price,
+                            Image = product.Image,
+                        }).ToList()
+
+                    })
+                    .ToList()
+            }).ToList();
+
+            return result;
+        }
+
+        //GET single user
+        public async Task<ActionResult<UserGetDTO>> GetSingleUser(int id)
+        {
+            var query = await _context.Users
+                .Include(user => user.Orders)
+                .ThenInclude(o => o.Products)
+                .Where(user => user.Id == id)
+                .FirstOrDefaultAsync();
+            if (query == null)
+            {
+                return null;
+            }
+            var result = new UserGetDTO
+            {
+                Id = query.Id,
+                UserName = query.UserName,
+                UserEmail = query.UserEmail,
+                PasswordHash = query.PasswordHash,
+                Orders = query.Orders
+                    .Where(order => order.Products.Count > 0)
+                    .Select(order => new OrderGetDTO
+                    {
+                        UserId = order.UserId,
+                        TotalAmount = order.Products.Sum(product => product.Price),
+                        Products = order.Products.Select(product => new ProductGetDTO
+                        {
+                            Id = product.Id,
+                            Title = product.Title,
+                            Price = product.Price,
+                            Image = product.Image,
+                        }).ToList()
+                    })
+                    .ToList()
+            };
+
+            return result;
+
+        }
         //Update product
         public async Task<ActionResult<Product>> UpdateProduct(int id, ProductUpdateDTO request)
         {

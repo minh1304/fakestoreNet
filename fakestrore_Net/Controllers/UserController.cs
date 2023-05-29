@@ -1,9 +1,6 @@
 ﻿using fakestrore_Net.DTOs.OrderDTO;
-using fakestrore_Net.DTOs.UserDTO;
 using fakestrore_Net.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using JsonException = Newtonsoft.Json.JsonException;
@@ -54,38 +51,6 @@ namespace fakestrore_Net.Controllers
             }
         }
 
-        //admin ms làm
-        [HttpGet]
-        public async Task<ActionResult<List<UserGetDTO>>> GetUser()
-        {
-            try
-            {
-                var result = await _userService.GetUser();
-                if (result == null)
-                {
-                    return BadRequest("Unable to retrieve orders.");
-                }
-
-                var settings = new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    DefaultValueHandling = DefaultValueHandling.Ignore
-                };
-
-                var json = JsonConvert.SerializeObject(result, Formatting.None, settings);
-
-                JObject jObject = JObject.Parse(json);
-                json = jObject.ToString();
-
-                return Ok(json);
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine("JSON serialization error: " + ex.Message);
-                return BadRequest("Unable to serialize the result.");
-            }
-        }
 
 
 
