@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace fakestrore_Net.Models
+﻿namespace fakestrore_Net.Models
 {
     public class Order
     {
@@ -13,10 +10,11 @@ namespace fakestrore_Net.Models
         public User? User { get; set; }
 
         // n - n: Một order có thể có nhiều product, 1 product cũng có thể có trong nhiều order
-        public required List<Product> Products { get; set; }
+        /*public List<Product> Products { get; set; }*/
+        public ICollection<OrderProduct> OrderProducts { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal TotalAmount { get; set; }
+        /*        [Column(TypeName = "decimal(10,2)")]
+                public decimal TotalPrice { get; set; }*/
     }
 
 }

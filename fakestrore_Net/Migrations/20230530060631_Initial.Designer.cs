@@ -12,7 +12,7 @@ using fakestrore_Net.Data;
 namespace fakestrore_Net.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230528120424_Initial")]
+    [Migration("20230530060631_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,21 +24,6 @@ namespace fakestrore_Net.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("OrderProduct");
-                });
 
             modelBuilder.Entity("fakestrore_Net.Models.Category", b =>
                 {
@@ -79,6 +64,24 @@ namespace fakestrore_Net.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("fakestrore_Net.Models.OrderProduct", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
@@ -164,21 +167,6 @@ namespace fakestrore_Net.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("fakestrore_Net.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("fakestrore_Net.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("fakestrore_Net.Models.Order", b =>
                 {
                     b.HasOne("fakestrore_Net.Models.User", "User")
@@ -188,6 +176,25 @@ namespace fakestrore_Net.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("fakestrore_Net.Models.OrderProduct", b =>
+                {
+                    b.HasOne("fakestrore_Net.Models.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fakestrore_Net.Models.Product", "Product")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
@@ -217,8 +224,15 @@ namespace fakestrore_Net.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("fakestrore_Net.Models.Order", b =>
+                {
+                    b.Navigation("OrderProducts");
+                });
+
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
                 {
+                    b.Navigation("OrderProducts");
+
                     b.Navigation("Rating");
                 });
 

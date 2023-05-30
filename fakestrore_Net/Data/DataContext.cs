@@ -13,5 +13,25 @@ namespace fakestrore_Net.Data
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderProduct>()
+                .HasKey(op => new { op.ProductId, op.OrderId });
+
+            modelBuilder.Entity<OrderProduct>()
+                .HasOne(op => op.Order)
+                .WithMany(o => o.OrderProducts)
+                .HasForeignKey(op => op.OrderId);
+
+            modelBuilder.Entity<OrderProduct>()
+                .HasOne(op => op.Product)
+                .WithMany(p => p.OrderProducts)
+                .HasForeignKey(op => op.ProductId);
+
+            // Configure other entity relationships...
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

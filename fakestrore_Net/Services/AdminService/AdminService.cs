@@ -17,11 +17,8 @@ namespace fakestrore_Net.Services.AdminService
             _context = context;
         }
 
-
-        //Add category 
         public async Task<ActionResult<List<Category>>> AddCategory(CategoryCreateDTO request)
         {
-
             var newCategory = new Category
             {
                 Name = request.Name
@@ -45,7 +42,6 @@ namespace fakestrore_Net.Services.AdminService
             return await _context.Categories.ToListAsync();
         }
 
-        //Add new product
         public async Task<ActionResult<List<Product>>> AddNewProduct(ProductCreateDTO request)
         {
             var categoryId = request.CategoryID;
@@ -74,9 +70,9 @@ namespace fakestrore_Net.Services.AdminService
             return await _context.Products.ToListAsync();
         }
 
-        //Delete product
         public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
         {
+
             var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
@@ -87,18 +83,18 @@ namespace fakestrore_Net.Services.AdminService
             return await _context.Products.ToListAsync();
         }
 
-
-        //GET all users
         public async Task<ActionResult<List<UserGetDTO>>> GetAllUser()
         {
             var query = await _context.Users
-               .Include(u => u.Orders)
-                   .ThenInclude(o => o.Products)
-               .ToListAsync();
+                        .Include(u => u.Orders)
+                            .ThenInclude(o => o.OrderProducts)
+                            .ThenInclude(op => op.Product)
+
+                        .ToListAsync();
 
             if (query.Count == 0)
             {
-                return null; // Return appropriate HTTP status code for empty result
+                return null;
             }
 
             var result = query.Select(user => new UserGetDTO
@@ -108,37 +104,38 @@ namespace fakestrore_Net.Services.AdminService
                 UserEmail = user.UserEmail,
                 PasswordHash = user.PasswordHash,
                 Orders = user.Orders
-                    //Check mảng rỗng 
-                    .Where(order => order.Products.Count > 0)
-                    .Select(order => new OrderGetDTO
-                    {
-                        UserId = order.UserId,
-                        //Chưa làm 
-                        /* TotalAmount = order.TotalAmount,*/
-                        TotalAmount = order.Products.Sum(product => product.Price),
-                        Products = order.Products.Select(product => new ProductGetDTO
-                        {
-                            Id = product.Id,
-                            Title = product.Title,
-                            Price = product.Price,
-                            Image = product.Image,
-                        }).ToList()
 
-                    })
-                    .ToList()
+                            .Select(order => new OrderGetDTO
+                            {
+                                UserId = order.Id,
+                                TotalPrice = order.OrderProducts
+                                    .Where(orderProduct => orderProduct.Product != null)
+                                    .Sum(orderProduct => orderProduct.Quantity * orderProduct.Product.Price),
+                                Products = order.OrderProducts
+                                    .Select(orderProduct => new ProductGetDTO
+                                    {
+                                        Id = orderProduct.Product != null ? orderProduct.Product.Id : 0,
+                                        Title = orderProduct.Product != null ? orderProduct.Product.Title : string.Empty,
+                                        Price = orderProduct.Product != null ? orderProduct.Product.Price : 0,
+                                        Image = orderProduct.Product != null ? orderProduct.Product.Image : string.Empty,
+                                        Quantity = orderProduct.Quantity
+                                    })
+                                    .ToList()
+                            })
+                            .ToList()
             }).ToList();
 
             return result;
         }
 
-        //GET single user
         public async Task<ActionResult<UserGetDTO>> GetSingleUser(int id)
         {
             var query = await _context.Users
-                .Include(user => user.Orders)
-                .ThenInclude(o => o.Products)
-                .Where(user => user.Id == id)
-                .FirstOrDefaultAsync();
+                        .Include(u => u.Orders)
+                            .ThenInclude(o => o.OrderProducts)
+                            .ThenInclude(op => op.Product)
+                        .FirstOrDefaultAsync();
+
             if (query == null)
             {
                 return null;
@@ -150,26 +147,31 @@ namespace fakestrore_Net.Services.AdminService
                 UserEmail = query.UserEmail,
                 PasswordHash = query.PasswordHash,
                 Orders = query.Orders
-                    .Where(order => order.Products.Count > 0)
-                    .Select(order => new OrderGetDTO
-                    {
-                        UserId = order.UserId,
-                        TotalAmount = order.Products.Sum(product => product.Price),
-                        Products = order.Products.Select(product => new ProductGetDTO
-                        {
-                            Id = product.Id,
-                            Title = product.Title,
-                            Price = product.Price,
-                            Image = product.Image,
-                        }).ToList()
-                    })
-                    .ToList()
+                             .Select(order => new OrderGetDTO
+                             {
+                                 UserId = order.Id,
+                                 TotalPrice = order.OrderProducts
+                                    .Where(orderProduct => orderProduct.Product != null)
+                                    .Sum(orderProduct => orderProduct.Quantity * orderProduct.Product.Price),
+                                 Products = order.OrderProducts
+                                    .Select(orderProduct => new ProductGetDTO
+                                    {
+                                        Id = orderProduct.Product != null ? orderProduct.Product.Id : 0,
+                                        Title = orderProduct.Product != null ? orderProduct.Product.Title : string.Empty,
+                                        Price = orderProduct.Product != null ? orderProduct.Product.Price : 0,
+                                        Image = orderProduct.Product != null ? orderProduct.Product.Image : string.Empty,
+                                        Quantity = orderProduct.Quantity
+                                    })
+                                    .ToList()
+                             })
+                            .ToList()
             };
 
             return result;
 
+
         }
-        //Update product
+
         public async Task<ActionResult<Product>> UpdateProduct(int id, ProductUpdateDTO request)
         {
             var product = await _context.Products
