@@ -50,9 +50,6 @@ namespace fakestrore_Net.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(10,2)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 

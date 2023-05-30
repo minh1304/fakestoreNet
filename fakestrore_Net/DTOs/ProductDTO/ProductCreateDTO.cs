@@ -1,6 +1,5 @@
 ﻿using fakestrore_Net.DTOs.RatingDTO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fakestrore_Net.DTOs.ProductDTO
@@ -16,7 +15,7 @@ namespace fakestrore_Net.DTOs.ProductDTO
         public int CategoryID { get; set; }
         public string Image { get; set; }
         //1-1
-        [Required] // Add the Required attribute
+        // Add the Required attribute
         public RatingCreateDTO Rating { get; set; }
     }
 }

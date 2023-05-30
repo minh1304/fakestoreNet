@@ -12,7 +12,7 @@ using fakestrore_Net.Data;
 namespace fakestrore_Net.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230530060631_Initial")]
+    [Migration("20230530103109_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -52,9 +52,6 @@ namespace fakestrore_Net.Migrations
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

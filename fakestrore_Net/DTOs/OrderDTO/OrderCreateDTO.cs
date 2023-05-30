@@ -3,6 +3,6 @@
     public class OrderCreateDTO
     {
         public int UserId { get; set; }
-        public required List<int> ProductIds { get; set; }
+        public required OrderProductDTO OrderProduct { get; set; }
     }
 }
