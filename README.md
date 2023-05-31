@@ -1,2 +1,6 @@
 # Build Server Fake Store with .NET
-.NET 7 Web API & Entity Framework SQL Server
+## Description: .NET 7 Web API & Entity Framework SQL Server
+## Document: 
+### 1. Register 
+[Imgur](https://i.imgur.com/4t4jhdh.jpg)
+### 2. Login
