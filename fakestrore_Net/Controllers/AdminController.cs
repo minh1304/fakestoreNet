@@ -2,6 +2,7 @@
 using fakestrore_Net.DTOs.ProductDTO;
 using fakestrore_Net.DTOs.UserDTO;
 using fakestrore_Net.Services.AdminService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,6 +13,7 @@ namespace fakestrore_Net.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;

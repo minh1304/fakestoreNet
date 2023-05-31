@@ -10,6 +10,7 @@ namespace fakestrore_Net.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -44,6 +45,28 @@ namespace fakestrore_Net.Controllers
                 // ...
 
                 return Ok("Success!");
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Lỗi serialize JSON: " + ex.Message);
+                return BadRequest("Can't serialize result");
+            }
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<string>> Login(UserLoginDTO request)
+        {
+
+            try
+            {
+                var result = await _authService.Login(request);
+                if (result == null)
+                {
+                    return BadRequest("Sai tên đăng nhập hoặc mật khẩu");
+                }
+
+
+                return result;
             }
             catch (JsonException ex)
             {
