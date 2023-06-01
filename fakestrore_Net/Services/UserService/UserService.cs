@@ -23,7 +23,7 @@ namespace fakestrore_Net.Services.UserService
             {
                 return null; // Người dùng chưa đăng nhập, trả về mã lỗi 401
             }
-            var existingUser = await _context.Users.FindAsync(userId);
+            var existingUser = await _context.Users.FindAsync(int.Parse(userId));
             if (existingUser == null)
             {
                 return null; // Return appropriate HTTP status code for user not found
@@ -31,25 +31,30 @@ namespace fakestrore_Net.Services.UserService
 
             var newOrder = new Order
             {
+                UserId = int.Parse(userId),
                 OrderDate = DateTime.Now,
                 OrderProducts = new List<OrderProduct>()
             };
 
-            var existingProduct = await _context.Products.FindAsync(request.OrderProduct.ProductId);
-            if (existingProduct != null)
+            foreach (var orderProductDto in request.OrderProduct)
             {
-                var orderProduct = new OrderProduct
+                var existingProduct = await _context.Products.FindAsync(orderProductDto.ProductId);
+                if (existingProduct != null)
                 {
-                    Product = existingProduct,
-                    Quantity = request.OrderProduct.Quantity
-                };
-                newOrder.OrderProducts.Add(orderProduct);
+                    var orderProduct = new OrderProduct
+                    {
+                        Product = existingProduct,
+                        Quantity = orderProductDto.Quantity
+                    };
+                    newOrder.OrderProducts.Add(orderProduct);
+                }
             }
 
             _context.Orders.Add(newOrder);
             await _context.SaveChangesAsync();
 
-            return await _context.Orders.ToListAsync();
+            var orders = await _context.Orders.ToListAsync();
+            return orders; // Trả về danh sách đơn hàng
         }
 
         public async Task<ActionResult<UserGetDTO>> Information()
