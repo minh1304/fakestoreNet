@@ -1,6 +1,5 @@
 ﻿using fakestrore_Net.Data;
 using fakestrore_Net.DTOs.OrderDTO;
-using fakestrore_Net.DTOs.UserDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -57,32 +56,6 @@ namespace fakestrore_Net.Services.UserService
             return orders; // Trả về danh sách đơn hàng
         }
 
-        public async Task<ActionResult<UserGetDTO>> Information()
-        {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return new ActionResult<UserGetDTO>(new BadRequestResult()); // Người dùng chưa đăng nhập, trả về mã lỗi 401
-            }
-            var existingUser = await _context.Users.FindAsync(int.Parse(userId));
 
-            if (existingUser == null)
-            {
-                return new ActionResult<UserGetDTO>(new NotFoundResult()); // Người dùng không tồn tại, trả về mã lỗi 404
-            }
-
-            var userDto = new UserGetDTO
-            {
-                Id = existingUser.Id,
-                UserName = existingUser.UserName,
-                UserEmail = existingUser.UserEmail,
-                Role = existingUser.Role
-
-                // Các thuộc tính khác của đối tượng UserGetDTO
-            };
-
-            return userDto;
-
-        }
     }
 }

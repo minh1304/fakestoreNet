@@ -7,5 +7,6 @@ namespace fakestrore_Net.Services.AuthService
     {
         Task<ActionResult<User>> Register(UserCreateDTO request);
         Task<ActionResult<string>> Login(UserLoginDTO request);
+        Task<ActionResult<UserGetDTO>> Information();
     }
 }

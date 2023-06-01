@@ -1,5 +1,4 @@
 ﻿using fakestrore_Net.DTOs.OrderDTO;
-using fakestrore_Net.DTOs.UserDTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fakestrore_Net.Services.UserService
@@ -8,6 +7,6 @@ namespace fakestrore_Net.Services.UserService
     {
         Task<ActionResult<List<Order>>> AddOrder(OrderCreateDTO request);
 
-        Task<ActionResult<UserGetDTO>> Information();
+
     }
 }

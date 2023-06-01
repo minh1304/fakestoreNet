@@ -12,11 +12,13 @@ public class AuthService : IAuthService
 {
     private readonly DataContext _context;
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthService(DataContext context, IConfiguration configuration)
+    public AuthService(DataContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _configuration = configuration;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     private string GetSecretKey()
@@ -94,5 +96,32 @@ public class AuthService : IAuthService
 
         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         return tokenString;
+    }
+    public async Task<ActionResult<UserGetDTO>> Information()
+    {
+        var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return new ActionResult<UserGetDTO>(new BadRequestResult()); // Người dùng chưa đăng nhập, trả về mã lỗi 401
+        }
+        var existingUser = await _context.Users.FindAsync(int.Parse(userId));
+
+        if (existingUser == null)
+        {
+            return new ActionResult<UserGetDTO>(new NotFoundResult()); // Người dùng không tồn tại, trả về mã lỗi 404
+        }
+
+        var userDto = new UserGetDTO
+        {
+            Id = existingUser.Id,
+            UserName = existingUser.UserName,
+            UserEmail = existingUser.UserEmail,
+            Role = existingUser.Role
+
+            // Các thuộc tính khác của đối tượng UserGetDTO
+        };
+
+        return userDto;
+
     }
 }
