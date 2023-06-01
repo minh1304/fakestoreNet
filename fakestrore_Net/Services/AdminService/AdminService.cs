@@ -107,7 +107,8 @@ namespace fakestrore_Net.Services.AdminService
 
                             .Select(order => new OrderGetDTO
                             {
-                                UserId = order.Id,
+                                Id = order.Id,
+                                UserId = order.UserId,
                                 TotalPrice = order.OrderProducts
                                     .Where(orderProduct => orderProduct.Product != null)
                                     .Sum(orderProduct => orderProduct.Quantity * orderProduct.Product.Price),
@@ -134,6 +135,7 @@ namespace fakestrore_Net.Services.AdminService
                         .Include(u => u.Orders)
                             .ThenInclude(o => o.OrderProducts)
                             .ThenInclude(op => op.Product)
+                        .Where(u => u.Id == id)
                         .FirstOrDefaultAsync();
 
             if (query == null)
@@ -149,7 +151,8 @@ namespace fakestrore_Net.Services.AdminService
                 Orders = query.Orders
                              .Select(order => new OrderGetDTO
                              {
-                                 UserId = order.Id,
+                                 Id = order.Id,
+                                 UserId = order.UserId,
                                  TotalPrice = order.OrderProducts
                                     .Where(orderProduct => orderProduct.Product != null)
                                     .Sum(orderProduct => orderProduct.Quantity * orderProduct.Product.Price),
@@ -166,10 +169,7 @@ namespace fakestrore_Net.Services.AdminService
                              })
                             .ToList()
             };
-
             return result;
-
-
         }
 
         public async Task<ActionResult<Product>> UpdateProduct(int id, ProductUpdateDTO request)
