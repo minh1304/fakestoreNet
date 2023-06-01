@@ -102,7 +102,6 @@ namespace fakestrore_Net.Services.AdminService
                 Id = user.Id,
                 UserName = user.UserName,
                 UserEmail = user.UserEmail,
-                Password = user.PasswordHash,
                 Orders = user.Orders
 
                             .Select(order => new OrderGetDTO
@@ -147,7 +146,6 @@ namespace fakestrore_Net.Services.AdminService
                 Id = query.Id,
                 UserName = query.UserName,
                 UserEmail = query.UserEmail,
-                Password = query.PasswordHash,
                 Orders = query.Orders
                              .Select(order => new OrderGetDTO
                              {
