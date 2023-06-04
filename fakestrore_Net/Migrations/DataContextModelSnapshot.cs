@@ -99,6 +99,13 @@ namespace fakestrore_Net.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(10,2)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 

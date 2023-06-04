@@ -12,7 +12,7 @@ using fakestrore_Net.Data;
 namespace fakestrore_Net.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230604082622_Initial")]
+    [Migration("20230604092147_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -101,6 +101,13 @@ namespace fakestrore_Net.Migrations
                     b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
