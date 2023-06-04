@@ -1,5 +1,6 @@
 ﻿using fakestrore_Net.Data;
-using fakestrore_Net.DTOs.OrderDTO;
+using fakestrore_Net.DTOs.CartDTO;
+using fakestrore_Net.DTOs.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -15,7 +16,17 @@ namespace fakestrore_Net.Services.UserService
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<ActionResult<List<Cart>>> AddOrder(CartCreateDTO request)
+        private int? GetAuthenticatedUserId()
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(userId) && int.TryParse(userId, out int id))
+            {
+                return id;
+            }
+            return null;
+
+        }
+        public async Task<ActionResult<List<Cart>>> AddCart(CartCreateDTO request)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -31,7 +42,7 @@ namespace fakestrore_Net.Services.UserService
             var newOrder = new Cart
             {
                 UserId = int.Parse(userId),
-                OrderDate = DateTime.Now,
+                CartDate = DateTime.Now,
                 CartProducts = new List<CartProduct>()
             };
 
@@ -56,6 +67,42 @@ namespace fakestrore_Net.Services.UserService
             return orders; // Trả về danh sách đơn hàng
         }
 
-
+        public async Task<ActionResult<List<CartGetDTO>>> GetCart()
+        {
+            var userId = GetAuthenticatedUserId();
+            if (userId == null)
+            {
+                return null;
+            }
+            var existingUser = await _context.Users.FindAsync(userId);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            var carts = await _context.Carts
+                .Include(c => c.CartProducts)
+                .ThenInclude(cp => cp.Product)
+                .Where(c => c.UserId == existingUser.Id)
+                .ToListAsync();
+            var cartGetDTO = carts.Select(carts => new CartGetDTO
+            {
+                Id = carts.Id,
+                UserId = carts.UserId,
+                TotalPrice = carts.CartProducts
+                                    .Where(orderProduct => orderProduct.Product != null)
+                                    .Sum(orderProduct => orderProduct.Quantity * orderProduct.Product.Price),
+                Products = carts.CartProducts
+                                    .Select(orderProduct => new ProductGetDTO
+                                    {
+                                        Id = orderProduct.Product != null ? orderProduct.Product.Id : 0,
+                                        Title = orderProduct.Product != null ? orderProduct.Product.Title : string.Empty,
+                                        Price = orderProduct.Product != null ? orderProduct.Product.Price : 0,
+                                        Image = orderProduct.Product != null ? orderProduct.Product.Image : string.Empty,
+                                        Quantity = orderProduct.Quantity
+                                    })
+                                    .ToList()
+            }).ToList();
+            return cartGetDTO;
+        }
     }
 }

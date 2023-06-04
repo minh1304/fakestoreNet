@@ -1,4 +1,4 @@
-﻿using fakestrore_Net.DTOs.OrderDTO;
+﻿using fakestrore_Net.DTOs.CartDTO;
 
 namespace fakestrore_Net.DTOs.UserDTO
 {

@@ -12,7 +12,7 @@ using fakestrore_Net.Data;
 namespace fakestrore_Net.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230530103109_Initial")]
+    [Migration("20230604082622_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,50 @@ namespace fakestrore_Net.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("fakestrore_Net.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("fakestrore_Net.Models.CartProduct", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "CartId");
+
+                    b.HasIndex("CartId");
+
+                    b.ToTable("CartProduct");
+                });
 
             modelBuilder.Entity("fakestrore_Net.Models.Category", b =>
                 {
@@ -50,8 +94,13 @@ namespace fakestrore_Net.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -61,24 +110,6 @@ namespace fakestrore_Net.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("fakestrore_Net.Models.OrderProduct", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "OrderId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
@@ -151,6 +182,10 @@ namespace fakestrore_Net.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -164,6 +199,42 @@ namespace fakestrore_Net.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("fakestrore_Net.Models.Cart", b =>
+                {
+                    b.HasOne("fakestrore_Net.Models.Order", "Order")
+                        .WithMany("Carts")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("fakestrore_Net.Models.User", "User")
+                        .WithMany("Carts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("fakestrore_Net.Models.CartProduct", b =>
+                {
+                    b.HasOne("fakestrore_Net.Models.Cart", "Cart")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fakestrore_Net.Models.Product", "Product")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("fakestrore_Net.Models.Order", b =>
                 {
                     b.HasOne("fakestrore_Net.Models.User", "User")
@@ -173,25 +244,6 @@ namespace fakestrore_Net.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("fakestrore_Net.Models.OrderProduct", b =>
-                {
-                    b.HasOne("fakestrore_Net.Models.Order", "Order")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("fakestrore_Net.Models.Product", "Product")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
@@ -216,6 +268,11 @@ namespace fakestrore_Net.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("fakestrore_Net.Models.Cart", b =>
+                {
+                    b.Navigation("CartProducts");
+                });
+
             modelBuilder.Entity("fakestrore_Net.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -223,18 +280,20 @@ namespace fakestrore_Net.Migrations
 
             modelBuilder.Entity("fakestrore_Net.Models.Order", b =>
                 {
-                    b.Navigation("OrderProducts");
+                    b.Navigation("Carts");
                 });
 
             modelBuilder.Entity("fakestrore_Net.Models.Product", b =>
                 {
-                    b.Navigation("OrderProducts");
+                    b.Navigation("CartProducts");
 
                     b.Navigation("Rating");
                 });
 
             modelBuilder.Entity("fakestrore_Net.Models.User", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

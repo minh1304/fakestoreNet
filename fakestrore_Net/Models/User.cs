@@ -8,9 +8,10 @@
         public string PasswordHash { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
 
-        // 1 - n 
+        // 1 - n: Một user có thể có nhiều cart
         public List<Cart> Carts { get; set; }
 
-
+        // 1 - n: Một user có thể có nhiều order
+        public List<Order> Orders { get; set; }
     }
 }

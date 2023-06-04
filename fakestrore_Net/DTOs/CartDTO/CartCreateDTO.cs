@@ -1,7 +1,7 @@
-﻿namespace fakestrore_Net.DTOs.OrderDTO
+﻿namespace fakestrore_Net.DTOs.CartDTO
 {
     public class CartCreateDTO
     {
-        public List<OrderProductDTO> CartProduct { get; set; }
+        public List<CartProductDTO> CartProduct { get; set; }
     }
 }

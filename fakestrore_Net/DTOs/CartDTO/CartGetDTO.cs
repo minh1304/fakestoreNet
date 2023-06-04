@@ -1,6 +1,6 @@
 ﻿using fakestrore_Net.DTOs.ProductDTO;
 
-namespace fakestrore_Net.DTOs.OrderDTO
+namespace fakestrore_Net.DTOs.CartDTO
 {
     public class CartGetDTO
     {
