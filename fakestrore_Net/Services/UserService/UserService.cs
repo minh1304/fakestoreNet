@@ -15,7 +15,7 @@ namespace fakestrore_Net.Services.UserService
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<ActionResult<List<Order>>> AddOrder(OrderCreateDTO request)
+        public async Task<ActionResult<List<Cart>>> AddOrder(CartCreateDTO request)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -28,31 +28,31 @@ namespace fakestrore_Net.Services.UserService
                 return null; // Return appropriate HTTP status code for user not found
             }
 
-            var newOrder = new Order
+            var newOrder = new Cart
             {
                 UserId = int.Parse(userId),
                 OrderDate = DateTime.Now,
-                OrderProducts = new List<OrderProduct>()
+                CartProducts = new List<CartProduct>()
             };
 
-            foreach (var orderProductDto in request.OrderProduct)
+            foreach (var cartProductDto in request.CartProduct)
             {
-                var existingProduct = await _context.Products.FindAsync(orderProductDto.ProductId);
+                var existingProduct = await _context.Products.FindAsync(cartProductDto.ProductId);
                 if (existingProduct != null)
                 {
-                    var orderProduct = new OrderProduct
+                    var orderProduct = new CartProduct
                     {
                         Product = existingProduct,
-                        Quantity = orderProductDto.Quantity
+                        Quantity = cartProductDto.Quantity
                     };
-                    newOrder.OrderProducts.Add(orderProduct);
+                    newOrder.CartProducts.Add(orderProduct);
                 }
             }
 
-            _context.Orders.Add(newOrder);
+            _context.Carts.Add(newOrder);
             await _context.SaveChangesAsync();
 
-            var orders = await _context.Orders.ToListAsync();
+            var orders = await _context.Carts.ToListAsync();
             return orders; // Trả về danh sách đơn hàng
         }
 

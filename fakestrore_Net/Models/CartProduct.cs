@@ -2,11 +2,11 @@
 
 namespace fakestrore_Net.Models
 {
-    public class OrderProduct
+    public class CartProduct
     {
-        [ForeignKey("Order")]
-        public int OrderId { get; set; }
-        public Order Order { get; set; }
+        [ForeignKey("Cart")]
+        public int CartId { get; set; }
+        public Cart Cart { get; set; }
 
         [ForeignKey("Product")]
         public int ProductId { get; set; }

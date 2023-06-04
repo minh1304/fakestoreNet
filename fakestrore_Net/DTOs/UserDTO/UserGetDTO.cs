@@ -10,7 +10,7 @@ namespace fakestrore_Net.DTOs.UserDTO
         public string Role { get; set; } = string.Empty;
 
         // 1 - n 
-        public List<OrderGetDTO>? Orders { get; set; }
+        public List<CartGetDTO>? Carts { get; set; }
 
     }
 }

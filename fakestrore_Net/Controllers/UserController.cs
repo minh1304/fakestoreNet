@@ -20,8 +20,8 @@ namespace fakestrore_Net.Controllers
         {
             _userService = userService;
         }
-        [HttpPost("order")]
-        public async Task<ActionResult<List<Product>>> AddOrder(OrderCreateDTO request)
+        [HttpPost("Cart")]
+        public async Task<ActionResult<List<Product>>> AddOrder(CartCreateDTO request)
         {
             var options = new JsonSerializerOptions
             {

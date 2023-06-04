@@ -20,9 +20,7 @@ namespace fakestrore_Net.Models
 
         // 1 - n: 1 product có thể thuộc nhiều đơn hàng khác nhau 
         /*        public List<Order> Orders { get; set; }*/
-        public ICollection<OrderProduct> OrderProducts { get; set; }
-
-
+        public ICollection<CartProduct> CartProducts { get; set; }
 
     }
 }

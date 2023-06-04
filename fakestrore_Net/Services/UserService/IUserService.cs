@@ -5,7 +5,7 @@ namespace fakestrore_Net.Services.UserService
 {
     public interface IUserService
     {
-        Task<ActionResult<List<Order>>> AddOrder(OrderCreateDTO request);
+        Task<ActionResult<List<Cart>>> AddOrder(CartCreateDTO request);
 
 
     }

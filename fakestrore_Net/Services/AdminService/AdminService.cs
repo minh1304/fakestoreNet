@@ -86,8 +86,8 @@ namespace fakestrore_Net.Services.AdminService
         public async Task<ActionResult<List<UserGetDTO>>> GetAllUser()
         {
             var query = await _context.Users
-                        .Include(u => u.Orders)
-                            .ThenInclude(o => o.OrderProducts)
+                        .Include(u => u.Carts)
+                            .ThenInclude(o => o.CartProducts)
                             .ThenInclude(op => op.Product)
 
                         .ToListAsync();
@@ -103,16 +103,16 @@ namespace fakestrore_Net.Services.AdminService
                 UserName = user.UserName,
                 UserEmail = user.UserEmail,
                 Role = user.Role,
-                Orders = user.Orders
+                Carts = user.Carts
 
-                            .Select(order => new OrderGetDTO
+                            .Select(order => new CartGetDTO
                             {
                                 Id = order.Id,
                                 UserId = order.UserId,
-                                TotalPrice = order.OrderProducts
+                                TotalPrice = order.CartProducts
                                     .Where(orderProduct => orderProduct.Product != null)
                                     .Sum(orderProduct => orderProduct.Quantity * orderProduct.Product.Price),
-                                Products = order.OrderProducts
+                                Products = order.CartProducts
                                     .Select(orderProduct => new ProductGetDTO
                                     {
                                         Id = orderProduct.Product != null ? orderProduct.Product.Id : 0,
@@ -132,8 +132,8 @@ namespace fakestrore_Net.Services.AdminService
         public async Task<ActionResult<UserGetDTO>> GetSingleUser(int id)
         {
             var query = await _context.Users
-                        .Include(u => u.Orders)
-                            .ThenInclude(o => o.OrderProducts)
+                        .Include(u => u.Carts)
+                            .ThenInclude(o => o.CartProducts)
                             .ThenInclude(op => op.Product)
                         .Where(u => u.Id == id)
                         .FirstOrDefaultAsync();
@@ -148,15 +148,15 @@ namespace fakestrore_Net.Services.AdminService
                 UserName = query.UserName,
                 UserEmail = query.UserEmail,
                 Role = query.Role,
-                Orders = query.Orders
-                             .Select(order => new OrderGetDTO
+                Carts = query.Carts
+                             .Select(order => new CartGetDTO
                              {
                                  Id = order.Id,
                                  UserId = order.UserId,
-                                 TotalPrice = order.OrderProducts
+                                 TotalPrice = order.CartProducts
                                     .Where(orderProduct => orderProduct.Product != null)
                                     .Sum(orderProduct => orderProduct.Quantity * orderProduct.Product.Price),
-                                 Products = order.OrderProducts
+                                 Products = order.CartProducts
                                     .Select(orderProduct => new ProductGetDTO
                                     {
                                         Id = orderProduct.Product != null ? orderProduct.Product.Id : 0,
