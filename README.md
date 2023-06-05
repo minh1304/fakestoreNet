@@ -62,7 +62,102 @@ fetch("https://localhost:7204/api/Product/Category/jewelry", requestOptions)
 ##### Output
 <img src="https://imgur.com/IMYzyXD.jpg"> <br>
 
+### 2. Auth
+#### Register (Admin)
+
+```javascript
+var raw = JSON.stringify({
+  "userName": "minh3",
+  "userEmail": "minh@gmail.com",
+  "password": "123"
+  "role": "Admin"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Auth/register", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+#### Register (Customer)
+
+```javascript
+var raw = JSON.stringify({
+  "userName": "minh4",
+  "userEmail": "minh@gmail.com",
+  "password": "123"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Auth/register", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+#### Login 
+```javascript
+var raw = JSON.stringify({
+  "userName": "minh3",
+  "userEmail": "minh@gmail.com",
+  "password": "123"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Auth/Login", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
+
+##### Output (JWT)
+<img src="https://imgur.com/O0yke5s.jpg"> <br>
 
 
+#### Get infor 
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer {token}");
 
+var raw = JSON.stringify({
+  "userName": "minh3",
+  "userEmail": "minh@gmail.com",
+  "password": "123"
+});
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Auth/me", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
+##### Output 
+<img src="https://imgur.com/zjGjwtk.jpg"> <br>
 
