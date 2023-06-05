@@ -24,6 +24,6 @@ namespace fakestrore_Net.DTOs.ProductDTO
         //1-1
         public RatingGetDTO? Rating { get; set; }
 
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
     }
 }

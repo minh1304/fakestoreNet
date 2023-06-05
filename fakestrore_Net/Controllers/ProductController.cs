@@ -1,4 +1,5 @@
 ﻿using fakestore_Net.Filter;
+using fakestrore_Net.DTOs.ProductDTO;
 using fakestrore_Net.Filter;
 using fakestrore_Net.Services.ProductService;
 using Microsoft.AspNetCore.Mvc;
@@ -18,22 +19,30 @@ namespace fakestrore_Net.Controllers
             _productService = productService;
         }
         [HttpGet]
-        public async Task<ActionResult<List<object>>> GetAllProducts([FromQuery] PaginationFilter filter, [FromQuery] SortFilter sortFilter)
+        public async Task<ActionResult<List<ProductGetDTO>>> GetAllProducts([FromQuery] PaginationFilter filter, [FromQuery] SortFilter sortFilter)
         {
             try
             {
-                var products = await _productService.GetAllProducts(filter, sortFilter);
-                if (products == null)
+                var result = await _productService.GetAllProducts(filter, sortFilter);
+                if (result == null)
                 {
-                    return NotFound("Not found Products");
+                    return BadRequest("Unable to retrieve orders.");
                 }
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    DefaultValueHandling = DefaultValueHandling.Ignore
+                };
 
-                return Ok(products);
+                var json = JsonConvert.SerializeObject(result, Formatting.None, settings);
+
+                return Ok(json);
             }
-            catch (Exception ex)
+            catch (System.Text.Json.JsonException ex)
             {
-                Console.WriteLine("Error retrieving products: " + ex.Message);
-                return BadRequest("Can't retrieve products");
+                Console.WriteLine("JSON serialization error: " + ex.Message);
+                return BadRequest("Unable to serialize the result.");
             }
         }
         //GET a single product
