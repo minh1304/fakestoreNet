@@ -165,3 +165,57 @@ fetch("https://localhost:7204/api/Auth/me", requestOptions)
 ##### Output 
 <img src="https://imgur.com/zjGjwtk.jpg"> <br>
 
+
+
+
+### 3. User
+#### Add cart 
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {token}");
+var raw = JSON.stringify({
+  "cartProduct": [
+    {
+      "productId": 2,
+      "quantity": 1
+    },
+    {
+      "productId": 1,
+      "quantity": 2
+    },
+    {
+      "productId": 3,
+      "quantity": 1
+    }
+  ]
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/User/Cart", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
+#### Get cart 
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {token}");
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/User/Cart", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+  ```
+##### Output 
+<img src="https://imgur.com/fyHWLJT.jpg"> <br>
