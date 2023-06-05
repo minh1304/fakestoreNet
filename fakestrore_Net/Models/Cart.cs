@@ -12,8 +12,5 @@
         // n - n: Một cart có thể có nhiều product, 1 product cũng có thể có trong nhiều cart
         public List<CartProduct> CartProducts { get; set; }
 
-        // 1 - 1: Một cart chỉ thuộc về một order
-        public int? OrderId { get; set; }
-        public Order Order { get; set; }
     }
 }

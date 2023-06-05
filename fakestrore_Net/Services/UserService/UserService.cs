@@ -1,6 +1,5 @@
 ﻿using fakestrore_Net.Data;
 using fakestrore_Net.DTOs.CartDTO;
-using fakestrore_Net.DTOs.OrderDTO;
 using fakestrore_Net.DTOs.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -106,64 +105,6 @@ namespace fakestrore_Net.Services.UserService
             return cartGetDTO;
         }
 
-        public async Task<ActionResult<List<Order>>> AddOrder(OrderCreateDTO request)
-        {
-            var userId = GetAuthenticatedUserId();
-            if (userId == null)
-            {
-                return null;
-            }
-            var existingUser = await _context.Users.FindAsync(userId);
-            if (existingUser == null)
-            {
-                return null;
-            }
-
-            var newOrder = new Order
-            {
-                CustomerName = request.CustomerName,
-                Address = request.Address,
-                UserId = existingUser.Id,
-                Carts = new List<Cart>()
-            };
-
-            decimal totalPrice = 0; // Biến để tính tổng giá tiền
-
-            foreach (var cartDto in request.Carts)
-            {
-                var newCart = new Cart
-                {
-                    UserId = existingUser.Id,
-                    CartDate = DateTime.Now,
-                    CartProducts = new List<CartProduct>()
-                };
-
-                foreach (var cartProductDto in cartDto.CartProduct)
-                {
-                    var existingProduct = await _context.Products.FindAsync(cartProductDto.ProductId);
-                    if (existingProduct != null)
-                    {
-                        var cartProduct = new CartProduct
-                        {
-                            Product = existingProduct,
-                            Quantity = cartProductDto.Quantity
-                        };
-                        newCart.CartProducts.Add(cartProduct);
-                        totalPrice += cartProduct.Quantity * cartProduct.Product.Price; // Tính tổng giá tiền
-                    }
-                }
-
-                newOrder.Carts.Add(newCart);
-            }
-
-            newOrder.TotalPrice = totalPrice; // Gán giá trị tổng giá tiền cho đơn hàng
-
-            _context.Orders.Add(newOrder);
-            await _context.SaveChangesAsync();
-
-            var orders = await _context.Orders.ToListAsync();
-            return orders;
-        }
 
     }
 }

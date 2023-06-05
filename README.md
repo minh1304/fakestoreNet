@@ -1,6 +1,10 @@
 # Build Server Fake Store with .NET
 ## Description: .NET 7 Web API & Entity Framework SQL Server
 ## Document: 
+
+### 0. Database Diagram
+<img src="https://imgur.com/4bCE2E0.jpg"> <br>
+
 ### 1. Products
 #### Get all products		
 ```javascript
