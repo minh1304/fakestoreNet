@@ -22,7 +22,7 @@
     - [Get Users](#get-users)
     - [Get Single User](#get-single-user)
     - [Post Category](#post-category)
-    - [Post Product](#post-product)
+    - [Add Product](#add-product)
     - [Delete Product](#delete-product)
     - [Adjust Product](#adjust-product)
 
@@ -513,9 +513,10 @@ var requestOptions = {
 fetch("https://localhost:7204/api/Admin/categories", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
-  .catch(error => console.log('error', error));```
+  .catch(error => console.log('error', error));
+```
   
-#### Post Product
+#### Add Product
 Note: The 'categoryID' must match the 'categoryId' in the database
 ```javascript
 var myHeaders = new Headers();
