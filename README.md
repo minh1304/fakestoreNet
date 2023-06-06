@@ -1,11 +1,31 @@
-# Build Server Fake Store with .NET
-## Description: .NET 7 Web API & Entity Framework SQL Server
-## Document: 
+# Backend Web Ecommerce
+## Table of contents
+- [Description](#description)
+- [Documentation](#documentation)
+  - [Database Diagram](#database-diagram)
+  - [Products](#products)
+    - [Get all products](#get-all-products)
+    - [Get single product](#get-single-product)
+    - [Limit result](#limit-result)
+    - [Sort result (based on Price)](#sort-result-based-on-price)
+    - [Get all Categories](#get-all-categories)
+    - [Get products in Category](#get-products-in-category)
+  - [Authentication](#authentication)
+    - [Register (Admin)](#register-admin)
+    - [Register (Customer)](#register-customer)
+    - [Login](#login)
+    - [Get info](#get-info)
+  - [User](#user)
+    - [Add to cart](#add-to-cart)
+    - [Get cart](#get-cart)
 
-### 0. Database Diagram
+## Description
+Backend web Ecommerce with .NET 7 Web API & Entity Framework SQL Server 
+## Documentation
+### Database Diagram
 <img src="https://imgur.com/4bCE2E0.jpg"> <br>
 
-### 1. Products
+### Products
 #### Get all products		
 ```javascript
 fetch("https://localhost:7204/api/Product", requestOptions)
