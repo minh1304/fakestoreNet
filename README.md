@@ -18,6 +18,10 @@
   - [User](#user)
     - [Add to cart](#add-to-cart)
     - [Get cart](#get-cart)
+  - [Admin](#admin)
+    - [Get Users](#get-users)
+    - [Get User by Id](#get-single-user)
+    
 
 ## Description
 Backend web Ecommerce with .NET 7 Web API & Entity Framework SQL Server 
@@ -86,7 +90,7 @@ fetch("https://localhost:7204/api/Product/Category/jewelry", requestOptions)
 ##### Output
 <img src="https://imgur.com/IMYzyXD.jpg"> <br>
 
-### 2. Auth
+### Auth
 #### Register (Admin)
 
 ```javascript
@@ -188,7 +192,7 @@ fetch("https://localhost:7204/api/Auth/me", requestOptions)
 
 
 
-### 3. User
+### User
 #### Add cart 
 ```javascript
 var myHeaders = new Headers();
@@ -239,3 +243,237 @@ fetch("https://localhost:7204/api/User/Cart", requestOptions)
   ```
 ##### Output 
 <img src="https://imgur.com/fyHWLJT.jpg"> <br>
+
+
+### Admin
+#### Get users
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {token}");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Admin/user", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
+##### Output 
+```json
+{
+  "Value": [
+    {
+      "Id": 1,
+      "UserName": "minh",
+      "UserEmail": "minh@gmail.com",
+      "Role": "Admin",
+      "Carts": []
+    },
+    {
+      "Id": 2,
+      "UserName": "minh2",
+      "UserEmail": "minh@gmail.com",
+      "Role": "Customer",
+      "Carts": [
+        {
+          "Id": 1,
+          "UserId": 2,
+          "TotalPrice": 66.9,
+          "Products": [
+            {
+              "Id": 2,
+              "Title": "Mens Casual Premium Slim Fit T-Shirts ",
+              "Price": 22.3,
+              "Image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+              "Quantity": 3
+            }
+          ]
+        },
+        {
+          "Id": 2,
+          "UserId": 2,
+          "TotalPrice": 396.75,
+          "Products": [
+            {
+              "Id": 1,
+              "Title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+              "Price": 109.95,
+              "Image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+              "Quantity": 3
+            },
+            {
+              "Id": 2,
+              "Title": "Mens Casual Premium Slim Fit T-Shirts ",
+              "Price": 22.3,
+              "Image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+              "Quantity": 3
+            }
+          ]
+        },
+        {
+          "Id": 3,
+          "UserId": 2,
+          "TotalPrice": 329.85,
+          "Products": [
+            {
+              "Id": 1,
+              "Title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+              "Price": 109.95,
+              "Image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+              "Quantity": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": 3,
+      "UserName": "minh3",
+      "UserEmail": "minh@gmail.com",
+      "Role": "Customer",
+      "Carts": [
+        {
+          "Id": 4,
+          "UserId": 3,
+          "TotalPrice": 342.79,
+          "Products": [
+            {
+              "Id": 1,
+              "Title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+              "Price": 109.95,
+              "Image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+              "Quantity": 2
+            },
+            {
+              "Id": 2,
+              "Title": "Mens Casual Premium Slim Fit T-Shirts ",
+              "Price": 22.3,
+              "Image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+              "Quantity": 3
+            },
+            {
+              "Id": 3,
+              "Title": "Mens Cotton Jacket",
+              "Price": 55.99,
+              "Image": "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
+              "Quantity": 1
+            }
+          ]
+        },
+        {
+          "Id": 5,
+          "UserId": 3,
+          "TotalPrice": 298.19,
+          "Products": [
+            {
+              "Id": 1,
+              "Title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+              "Price": 109.95,
+              "Image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+              "Quantity": 2
+            },
+            {
+              "Id": 2,
+              "Title": "Mens Casual Premium Slim Fit T-Shirts ",
+              "Price": 22.3,
+              "Image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+              "Quantity": 1
+            },
+            {
+              "Id": 3,
+              "Title": "Mens Cotton Jacket",
+              "Price": 55.99,
+              "Image": "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
+              "Quantity": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+#### Get user by Id 
+
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {token}");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Admin/user/2", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
+
+##### Output
+```json
+{
+  "Value": {
+    "Id": 2,
+    "UserName": "minh2",
+    "UserEmail": "minh@gmail.com",
+    "Role": "Customer",
+    "Carts": [
+      {
+        "Id": 1,
+        "UserId": 2,
+        "TotalPrice": 66.9,
+        "Products": [
+          {
+            "Id": 2,
+            "Title": "Mens Casual Premium Slim Fit T-Shirts ",
+            "Price": 22.3,
+            "Image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+            "Quantity": 3
+          }
+        ]
+      },
+      {
+        "Id": 2,
+        "UserId": 2,
+        "TotalPrice": 396.75,
+        "Products": [
+          {
+            "Id": 1,
+            "Title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+            "Price": 109.95,
+            "Image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+            "Quantity": 3
+          },
+          {
+            "Id": 2,
+            "Title": "Mens Casual Premium Slim Fit T-Shirts ",
+            "Price": 22.3,
+            "Image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+            "Quantity": 3
+          }
+        ]
+      },
+      {
+        "Id": 3,
+        "UserId": 2,
+        "TotalPrice": 329.85,
+        "Products": [
+          {
+            "Id": 1,
+            "Title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+            "Price": 109.95,
+            "Image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+            "Quantity": 3
+          }
+        ]
+      }
+    ]
+  }
+}
+```
