@@ -20,8 +20,11 @@
     - [Get cart](#get-cart)
   - [Admin](#admin)
     - [Get Users](#get-users)
-    - [Get User by Id](#get-single-user)
-    
+    - [Get Single User](#get-single-user)
+    - [Post Category](#post-category)
+    - [Post Product](#post-product)
+    - [Delete Product](#delete-product)
+    - [Adjust Product](#adjust-product)
 
 ## Description
 Backend web Ecommerce with .NET 7 Web API & Entity Framework SQL Server 
@@ -245,7 +248,7 @@ fetch("https://localhost:7204/api/User/Cart", requestOptions)
 <img src="https://imgur.com/fyHWLJT.jpg"> <br>
 
 
-### Admin
+### Admin (Role == "Admin")
 #### Get users
 ```javascript
 var myHeaders = new Headers();
@@ -397,7 +400,7 @@ fetch("https://localhost:7204/api/Admin/user", requestOptions)
   ]
 }
 ```
-#### Get user by Id 
+#### Get Single User
 
 ```javascript
 var myHeaders = new Headers();
@@ -477,3 +480,116 @@ fetch("https://localhost:7204/api/Admin/user/2", requestOptions)
   }
 }
 ```
+#### Post Category
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer {token}");
+
+var raw = JSON.stringify({
+  "name": "string",
+  "products": [
+    {
+      "title": "string",
+      "price": 0,
+      "description": "string",
+      "categoryID": 0,
+      "image": "string",
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    }
+  ]
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Admin/categories", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));```
+  
+#### Post Product
+Note: The 'categoryID' must match the 'categoryId' in the database
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer {token}");
+
+var raw = JSON.stringify({
+  "title": "string",
+  "price": 0,
+  "description": "string",
+  "categoryID": 0,
+  "image": "string",
+  "rating": {
+    "rate": 0,
+    "count": 0
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Admin/product", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+  
+```
+
+  
+#### Delete Product
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer {token}");
+
+var requestOptions = {
+  method: 'DELETE',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Admin/product/3", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+   ```
+ 
+#### Adjust Product
+Note: The 'categoryID' must match the 'categoryId' in the database
+ ```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer {token}");
+
+var raw = JSON.stringify({
+  "title": "string",
+  "price": 0,
+  "description": "string",
+  "image": "string",
+  "categoryID": 2
+});
+
+var requestOptions = {
+  method: 'PUT',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://localhost:7204/api/Admin/product/3", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error)); 
+ ```
