@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 fakestore_Net/appsettings.json
+appsettings.json
