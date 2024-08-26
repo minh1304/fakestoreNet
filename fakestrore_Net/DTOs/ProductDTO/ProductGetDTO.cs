@@ -18,6 +18,7 @@ namespace fakestrore_Net.DTOs.ProductDTO
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Category { get; set; }
+        public int CategoryID { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Image { get; set; }

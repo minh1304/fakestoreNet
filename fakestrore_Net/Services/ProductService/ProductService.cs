@@ -4,6 +4,7 @@ using fakestrore_Net.DTOs.CategoryDTO;
 using fakestrore_Net.DTOs.ProductDTO;
 using fakestrore_Net.DTOs.RatingDTO;
 using fakestrore_Net.Filter;
+using fakestrore_Net.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,7 @@ namespace fakestrore_Net.Services.ProductService
             var productsQuery = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Rating)
+                .Where(p => p.IsActive == "Y")
                 .Select(p => new ProductGetDTO
                 {
                     Id = p.Id,
@@ -48,8 +50,6 @@ namespace fakestrore_Net.Services.ProductService
             {
                 productsQuery = productsQuery.OrderBy(p => p.Price);
             }
-
-            //Phân trang: Nếu không truyền vào thì hiện mặc định
 
             if (filter != null && filter.PageSize.HasValue && filter.PageNumber.HasValue)
             {
@@ -84,7 +84,8 @@ namespace fakestrore_Net.Services.ProductService
                     Title = p.Title,
                     Price = p.Price,
                     Description = p.Description,
-                    Category = p.Category.Name, // Lấy tên danh mục từ đối tượng Category
+                    Category = p.Category.Name,
+                    CategoryID = p.Category.Id,
                     Image = p.Image,
                     Rating = new RatingGetDTO
                     {
@@ -100,13 +101,18 @@ namespace fakestrore_Net.Services.ProductService
             return product;
         }
         //GET all Name category
-        public async Task<List<string>> GetAllCategories()
+
+        public async Task<List<CategoryDto>> GetAllCategories()
         {
-            var nameCategories = await _context.Categories
-                .Select(c => c.Name)
+            var categories = await _context.Categories
+                .Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
                 .ToListAsync();
 
-            return nameCategories;
+            return categories;
         }
 
         //GET all products in Category

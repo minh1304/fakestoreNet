@@ -2,6 +2,7 @@ global using fakestrore_Net.Models;
 using fakestrore_Net.Data;
 using fakestrore_Net.Services.AdminService;
 using fakestrore_Net.Services.AuthService;
+using fakestrore_Net.Services.OrderService;
 using fakestrore_Net.Services.ProductService;
 using fakestrore_Net.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -52,17 +53,37 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddHttpContextAccessor();
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+*/
+// Prod
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

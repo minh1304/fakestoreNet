@@ -1,4 +1,5 @@
 ﻿using fakestrore_Net.DTOs.CategoryDTO;
+using fakestrore_Net.DTOs.OrderDTO;
 using fakestrore_Net.DTOs.ProductDTO;
 using fakestrore_Net.DTOs.UserDTO;
 using fakestrore_Net.Services.AdminService;
@@ -94,7 +95,7 @@ namespace fakestrore_Net.Controllers
         }
 
         //Remove by id
-        [HttpDelete("product/{id}")]
+        [HttpPatch("deleteProduct/{id}")]
         public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
         {
             var options = new JsonSerializerOptions
@@ -220,6 +221,73 @@ namespace fakestrore_Net.Controllers
                 Console.WriteLine("JSON serialization error: " + ex.Message);
                 return BadRequest("Unable to serialize the result.");
             }
+        }
+        [HttpGet("GetAllOrders")]
+        public async Task<IActionResult> GetAllOrder()
+        {
+            var orders = await _adminService.GetAllOrderAsync();
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+
+        }
+        [HttpPost("getOrderByStatus")]
+        public async Task<IActionResult> GetOrderByStatus([FromBody] OrderGetDto request)
+        {
+            var orders = await _adminService.GetOrderByStatus(request);
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+        // GET Oder by ID 
+        [HttpGet("order/{orderId}")]
+        public async Task<IActionResult> GetOrderById(int orderId)
+        {
+            var order = await _adminService.GetOrderByOrderIdAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return Ok(order);
+        }
+
+
+        //Get Order Completed
+        [HttpGet("getOrdersCompleted")]
+
+        public async Task<IActionResult> GetOrdersCompleted([FromBody] OrderGetDto request)
+        {
+            var orders = await _adminService.GetOrdersCompletedAsync(request);
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+
+        //Get Order Cancel 
+        [HttpGet("getOrdersCanceled")]
+        public async Task<IActionResult> GetOrdersCanceled([FromBody] OrderGetDto request)
+        {
+            var orders = await _adminService.GetOrdersCanceledAsync(request);
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+        [HttpPatch("UpdateOrderById")]
+        public async Task<IActionResult> UpdateOrderById([FromBody] OrderUpdateDto orderCreateDto)
+        {
+            var result = await _adminService.UpdateOrderById(orderCreateDto);
+            if (!String.IsNullOrEmpty(result)) {
+                return Ok("Success!");
+            }
+            else { return BadRequest(); }
         }
     }
 }

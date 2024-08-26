@@ -1,4 +1,5 @@
 ﻿using fakestrore_Net.DTOs.CategoryDTO;
+using fakestrore_Net.DTOs.OrderDTO;
 using fakestrore_Net.DTOs.ProductDTO;
 using fakestrore_Net.DTOs.UserDTO;
 using Microsoft.AspNetCore.Mvc;
@@ -13,5 +14,11 @@ namespace fakestrore_Net.Services.AdminService
         Task<ActionResult<Product>> UpdateProduct(int id, ProductUpdateDTO request);
         Task<ActionResult<List<UserGetDTO>>> GetAllUser();
         Task<ActionResult<UserGetDTO>> GetSingleUser(int id);
+        Task<List<OrderDto>> GetAllOrderAsync();
+        Task<OrderResultDto> GetOrderByStatus(OrderGetDto request);
+        Task<OrderDto> GetOrderByOrderIdAsync(int orderId);
+        Task<string>UpdateOrderById(OrderUpdateDto order);
+        Task<List<OrderDto>> GetOrdersCompletedAsync(OrderGetDto request);
+        Task<List<OrderDto>> GetOrdersCanceledAsync(OrderGetDto request);
     }
 }

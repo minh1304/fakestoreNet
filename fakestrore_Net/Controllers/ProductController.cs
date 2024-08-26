@@ -1,4 +1,5 @@
 ﻿using fakestore_Net.Filter;
+using fakestrore_Net.DTOs.CategoryDTO;
 using fakestrore_Net.DTOs.ProductDTO;
 using fakestrore_Net.Filter;
 using fakestrore_Net.Services.ProductService;
@@ -77,7 +78,7 @@ namespace fakestrore_Net.Controllers
         }
         //Get all name category
         [HttpGet("Categories")]
-        public async Task<ActionResult<List<string>>> GetAllCategories()
+        public async Task<ActionResult<List<CategoryDto>>> GetAllCategories()
         {
             try
             {
